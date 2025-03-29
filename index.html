@@ -22,7 +22,7 @@
         .form-container {
             padding: 20px;
             width: 100%;
-            max-width: 600px;
+            max-width: 768px;
             margin: 0 auto;
         }
 
@@ -44,11 +44,13 @@
 
         @media (min-width: 768px) {
             body {
-                background-color: #cccccc;
+                background-color: #e1e6ee;
             }
 
             .form-container {
                 background: #f4f4f9;
+                padding-left: 120px;
+                padding-right: 120px;
                 min-height: 100vh;
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             }
@@ -103,7 +105,7 @@
         }
 
         .form-container button:disabled {
-            background-color: #a4a4a4;
+            background-color: #cfcfcf;
         }
 
         .spinner {
@@ -156,6 +158,9 @@
             <label for="email">Email</label>
             <input type="email" id="email" placeholder="Email" required>
 
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" autocomplete="tel"  placeholder="Phone">
+
             <button type="submit" id="submitButton">
                 Submit
             </button>
@@ -176,7 +181,8 @@
             const data = {
                 name: document.getElementById("name").value,
                 address: document.getElementById("street-address").value,
-                email: document.getElementById("email").value
+                email: document.getElementById("email").value,
+                phone: document.getElementById("phone").value
             };
 
             fetch("https://script.google.com/macros/s/AKfycbx0VogDLyAJZn4A7L5IznvOmB8hoLJugfQ594-w1SlK1v8-Y5INk19tF-Cd6FZh0IzW/exec", {
