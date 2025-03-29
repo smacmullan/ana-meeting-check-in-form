@@ -171,6 +171,19 @@
     </div>
 
     <script>
+        // Pre-populate form fields with values from local storage
+        document.addEventListener("DOMContentLoaded", function () {
+            const name = localStorage.getItem("name");
+            const address = localStorage.getItem("address");
+            const email = localStorage.getItem("email");
+            const phone = localStorage.getItem("phone");
+
+            if (name) document.getElementById("name").value = name;
+            if (address) document.getElementById("street-address").value = address;
+            if (email) document.getElementById("email").value = email;
+            if (phone) document.getElementById("phone").value = phone;
+        });
+
         document.getElementById("signInForm").addEventListener("submit", function (e) {
             e.preventDefault();
 
@@ -194,6 +207,12 @@
             })
                 .then(response => response.json())
                 .then(() => {
+                    // Save form data to local storage
+                    localStorage.setItem("name", data.name);
+                    localStorage.setItem("address", data.address);
+                    localStorage.setItem("email", data.email);
+                    localStorage.setItem("phone", data.phone);
+
                     document.getElementById("signInForm").style.display = "none";
                     document.getElementById("successMessage").style.display = "block";
                 })
