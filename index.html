@@ -43,8 +43,6 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            margin-top: 10px;
-            margin-bottom: 15px;
         }
 
         @media (min-width: 768px) {
@@ -146,15 +144,24 @@
             border-radius: 8px;
             background-color: #c4fad1;
         }
+        .error-message {
+            text-align: center;
+            color: #ff4646;
+            font-size: 14px;
+            padding: 40px;
+            margin: 10px;
+            border-radius: 8px;
+            background-color: #ffa5a5;
+        }
     </style>
 </head>
 
 <body>
     <div class="content">
-        <div style="background-color:#30a6ea; padding: 10px; display: flex; align-items: center; justify-content: center;">
+        <div style="background-color:#30a6ea; padding: 5px; display: flex; align-items: center; justify-content: center;">
             <a href="https://www.avondaleneighbors.org/" style="display: block;" target="_blank">
-                <img width="200" height="auto"
-                    style="width: 200px; height: auto; max-width: 200px !important; border-radius: 0; display: block;"
+                <img width="150" height="auto"
+                    style="width: 150px; height: auto; max-width: 150px !important; border-radius: 0; display: block;"
                     alt="ANA Logo" src="public/images/ANA Logo and Text - White.png">
             </a>
         </div>
@@ -180,8 +187,12 @@
                     Submit
                 </button>
             </form>
-            <div id="successMessage" class="success-message" style="display: none;">
-                Attendance recorded.
+            <div id="successMessage" class="success-message" style="display: block;">
+                <p>Attendance recorded</p>
+                <p style="font-size: 12px; font-style: italic;">You may now close this tab</p>
+            </div>
+            <div id="errorMessage" class="error-message" style="display: none;">
+                An error occurred. Please try again.
             </div>
         </div>
     </div>
@@ -207,6 +218,10 @@
             submitButton.disabled = true;
             submitButton.innerHTML = 'Submitting... <span class="spinner"></span>';
 
+            const errorMessage = document.getElementById("errorMessage");
+            // hide error message (if visible)
+            errorMessage.style.display = "none";
+
             const data = {
                 name: document.getElementById("name").value,
                 address: document.getElementById("street-address").value,
@@ -222,8 +237,13 @@
                 }
             })
                 .then(response => response.json())
-                .then(() => {
-                    // Save form data to local storage
+                .then((response) => {
+
+                    if (response.status !== "Success") {
+                        throw new Error(`Failed to submit form data. ${response.message}`);
+                    }
+
+                    // save form data to local storage
                     localStorage.setItem("name", data.name);
                     localStorage.setItem("address", data.address);
                     localStorage.setItem("email", data.email);
@@ -234,8 +254,13 @@
                 })
                 .catch(error => {
                     console.error("Error:", error);
+                    // re-enable form
                     submitButton.disabled = false;
                     submitButton.innerHTML = 'Submit';
+                    
+                    // show error message
+                    errorMessage.innerHTML = `Error: ${error.message}`;
+                    errorMessage.style.display = "block";
                 });
         });
     </script>
