@@ -94,10 +94,10 @@
         }
 
         .form-container button {
-            width: 100%;
-            padding: 15px;
-            margin-top: 15px;
-            background-color: #007BFF;
+            width: auto;
+            padding: 15px 30px;
+            margin: 15px auto 0;
+            background-color: #2DD881;
             color: #fff;
             border: none;
             border-radius: 4px;
@@ -107,7 +107,7 @@
         }
 
         .form-container button:hover {
-            background-color: #0056b3;
+            background-color: #1eae70;
         }
 
         .form-container button:disabled {
@@ -144,6 +144,7 @@
             border-radius: 8px;
             background-color: #c4fad1;
         }
+
         .error-message {
             text-align: center;
             color: #ff4646;
@@ -158,10 +159,10 @@
 
 <body>
     <div class="content">
-        <div style="background-color:#30a6ea; padding: 5px; display: flex; align-items: center; justify-content: center;">
+        <div
+            style="background-color:#30a6ea; padding: 5px; display: flex; align-items: center; justify-content: center;">
             <a href="https://www.avondaleneighbors.org/" style="display: block;" target="_blank">
-                <img width="150" height="auto"
-                    style="width: 150px; height: auto; max-width: 150px !important; border-radius: 0; display: block;"
+                <img width="auto" height="65px" style="height: 65px; width: auto; border-radius: 0; display: block;"
                     alt="ANA Logo" src="public/images/ANA Logo and Text - White.png">
             </a>
         </div>
@@ -198,8 +199,8 @@
     </div>
 
     <script>
-        // Pre-populate form fields with values from local storage
         document.addEventListener("DOMContentLoaded", function () {
+            // Pre-populate form fields with values from local storage
             const name = localStorage.getItem("name");
             const address = localStorage.getItem("address");
             const email = localStorage.getItem("email");
@@ -209,6 +210,14 @@
             if (address) document.getElementById("street-address").value = address;
             if (email) document.getElementById("email").value = email;
             if (phone) document.getElementById("phone").value = phone;
+
+
+            // show submission success message if form was submitted within the last 30 minutes
+            const lastSubmitTimestamp = localStorage.getItem("lastSubmitTimestamp");
+            if (lastSubmitTimestamp && (new Date() - new Date(lastSubmitTimestamp)) < 30 * 60 * 1000) {
+                document.getElementById("signInForm").style.display = "none";
+                document.getElementById("successMessage").style.display = "block";
+            }
         });
 
         document.getElementById("signInForm").addEventListener("submit", function (e) {
@@ -248,6 +257,7 @@
                     localStorage.setItem("address", data.address);
                     localStorage.setItem("email", data.email);
                     localStorage.setItem("phone", data.phone);
+                    localStorage.setItem("lastSubmitTimestamp", new Date());
 
                     document.getElementById("signInForm").style.display = "none";
                     document.getElementById("successMessage").style.display = "block";
@@ -257,7 +267,7 @@
                     // re-enable form
                     submitButton.disabled = false;
                     submitButton.innerHTML = 'Submit';
-                    
+
                     // show error message
                     errorMessage.innerHTML = `Error: ${error.message}`;
                     errorMessage.style.display = "block";
